@@ -1,0 +1,138 @@
+
+<!--редактирование/создания задачи-->
+
+<mat-dialog-content>
+  <p mat-dialog-title>{{dialogTitle}}</p>
+
+  <!--название задачи    -->
+  <mat-form-field class="mat-form-field">
+
+    <mat-label>Название (обязательно)</mat-label>
+    <input
+      #inputTitle
+      matInput
+
+      [(ngModel)]="tmpTitle"
+
+      (keydown.enter)="onConfirm()"> <!-- по нажатию на enter можем сразу сохранить задачу -->
+
+    <button
+      *ngIf="tmpTitle.trim().length > 0"
+
+       matSuffix mat-icon-button aria-label="Clear"
+
+      (click)="tmpTitle= ''" class="size25">
+
+      <mat-icon>clear</mat-icon>
+    </button>
+
+  </mat-form-field>
+<br>
+
+  <!--    выпадающий список категорий-->
+  <mat-form-field class="mat-form-field">
+    <mat-label>Укажите категорию</mat-label>
+
+    <mat-select [(ngModel)]="tmpCategory">
+      <mat-option [value]="null">Без категории</mat-option>
+      <mat-option *ngFor="let cat of categories" [value]="cat">
+        {{cat.title}}
+      </mat-option>
+    </mat-select>
+
+  </mat-form-field>
+  <br>
+  <!--    выпадающий список приоритетов-->
+  <mat-form-field class="mat-form-field">
+    <mat-label>Укажите приоритет</mat-label>
+
+    <mat-select [(ngModel)]="tmpPriority">
+      <mat-option [value]="null">Без приоритета</mat-option>
+
+      <mat-option *ngFor="let p of priorities" [value]="p">
+        {{p.title}}
+      </mat-option>
+    </mat-select>
+
+
+  </mat-form-field>
+  <br>
+  <!--    календарь - срок выполнения-->
+  <mat-form-field class="mat-form-field">
+
+    <input
+      matInput placeholder="Укажите срок выполнения" #inputDate
+      readonly="true"
+
+      [matDatepicker]="picker"
+      [(ngModel)]="tmpDate"
+
+      (click)="picker.open()">
+
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <!-- иконка календаря (для открытия календаря) -->
+
+    <mat-datepicker #picker></mat-datepicker> <!-- компонент календаря (открывается по нажатию)-->
+
+    <!--кнопка очистки даты -->
+    <button
+      *ngIf="inputDate.value.trim().length > 0"
+
+      matSuffix mat-icon-button aria-label="Clear"
+
+      (click)="tmpDate = null" class="size25">
+
+      <mat-icon>clear</mat-icon>
+
+    </button>
+
+  </mat-form-field>
+
+
+<!--  кнопки возможных действий-->
+<mat-dialog-actions>
+
+  <div>
+    <button
+      mat-raised-button color="primary"
+      (click)="onConfirm()"
+      [disabled]="inputTitle.value.trim().length==0">  <!-- если пустой текст - кнопка "Сохранить" будет недоступна -->
+      Сохранить
+    </button>
+
+    <button mat-raised-button (click)="onCancel()">Отмена</button>
+
+
+    <button
+      class="btn-success"
+      mat-button
+      *ngIf="!task.completed && canActivateDeactivate()"
+      (click)="complete()"
+
+    >
+      Завершить задачу
+    </button>
+
+    <button
+      class="btn-success"
+      mat-button
+      (click)="activate()"
+      *ngIf="task.completed && canActivateDeactivate()">
+      Активировать
+    </button>
+
+    <button
+      class="btn-danger"
+      mat-button
+      *ngIf="canActivateDeactivate()"
+      (click)="delete()"
+    >
+      Удалить задачу
+
+    </button>
+
+  </div>
+
+</mat-dialog-actions>
+
+</mat-dialog-content>

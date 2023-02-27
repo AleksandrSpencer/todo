@@ -1,0 +1,14 @@
+.header-icon {
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.settings button{
+  margin-right: 0;
+}
+.main-panel > .content{
+  margin-top: 30px !important;
+}
+.app-header{
+  width: 100%;
+}
